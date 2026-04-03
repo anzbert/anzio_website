@@ -1,5 +1,4 @@
 <script lang="ts">
-  export let nav: Array<string> = [];
 
   import { fly } from "svelte/transition";
   import Card2 from "../components/card2.svelte";
@@ -12,6 +11,11 @@
 
   // Project Files:
   import { projects } from "../projects/!projectindex";
+  interface Props {
+    nav?: Array<string>;
+  }
+
+  let { nav = [] }: Props = $props();
 
   // scrolling and page changing
   async function scrollTo(id: string) {
@@ -34,7 +38,7 @@
 <div class="subnav" in:fly={flyRight}>
   <div class="buttons">
     {#each projects as category}
-      <button on:click={() => scrollTo(`${category.title}`)}
+      <button onclick={() => scrollTo(`${category.title}`)}
         >{category.title}</button
       >
     {/each}
@@ -53,33 +57,37 @@
           <div class="content" in:fly={flyLeft}>
             {#each category.array as project}
               <Card2>
-                <div slot="header">
-                  <h3 class="title">{project.name}</h3>
-                </div>
-
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <div
-                  class="image"
-                  slot="thumbnail"
-                  on:click={() => (location.hash = `projects/${project.link}`)}
-                  on:keypress={() =>
-                    (location.hash = `projects/${project.link}`)}
-                >
-                  <Lazypicture
-                    lazy={false}
-                    spinner={true}
-                    sources={{
-                      base: `${project.source.path}.jpg`,
-                      webp: `${project.source.path}.webp`,
-                      avif: `${project.source.path}.avif`,
-                    }}
-                  />
-                  <div id={project.link} class="project-icons">
-                    {#each project.logos as logo}
-                      <img src={logo.path} alt="" class="icon" />
-                    {/each}
+                {#snippet header()}
+                                <div >
+                    <h3 class="title">{project.name}</h3>
                   </div>
-                </div>
+                              {/snippet}
+
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                {#snippet thumbnail()}
+                                <div
+                    class="image"
+                    
+                    onclick={() => (location.hash = `projects/${project.link}`)}
+                    onkeypress={() =>
+                    (location.hash = `projects/${project.link}`)}
+                  >
+                    <Lazypicture
+                      lazy={false}
+                      spinner={true}
+                      sources={{
+                        base: `${project.source.path}.jpg`,
+                        webp: `${project.source.path}.webp`,
+                        avif: `${project.source.path}.avif`,
+                      }}
+                    />
+                    <div id={project.link} class="project-icons">
+                      {#each project.logos as logo}
+                        <img src={logo.path} alt="" class="icon" />
+                      {/each}
+                    </div>
+                  </div>
+                              {/snippet}
               </Card2>
             {/each}
           </div>
@@ -88,7 +96,7 @@
     </div>
   {:else}
     {#await asyncImportComponent(nav[1]) then ProjectPage}
-      <svelte:component this={ProjectPage} />
+      <ProjectPage />
     {/await}
   {/if}
 </div>

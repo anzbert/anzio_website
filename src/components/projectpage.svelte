@@ -1,35 +1,51 @@
 <script lang="ts">
-  export let picPath: string = "";
-  export let picNumber: number = 0;
-  export let picCaptions: Array<string> = [];
-  export let underConstruction: boolean = false;
-  // slot name="markdown"
-  /////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////
-
   import Card from "../components/card1.svelte";
   import Lazypicture from "../components/lazypicture.svelte";
   import { fade, fly } from "svelte/transition";
-  import { fade1, flyLeft, defaultSwipeConfig } from "../stores";
-  import { Swipe, SwipeItem } from "svelte-swipe";
+  import { fade1, flyLeft } from "../stores";
+  import Construction from "./construction.svelte";
 
-  import type { SvelteComponent } from "svelte";
-  let SwipeComponent: SvelteComponent; // from swipe module. type unknown
+  import useEmblaCarousel from "embla-carousel-svelte";
+  import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 
-  let paths: Array<string> = [];
-  if (picPath !== "") {
-    for (let i = 0; i < picNumber; i++) {
-      let path = `${picPath}${i}`;
-      paths.push(path);
-    }
+  interface Props {
+    picPath?: string;
+    picNumber?: number;
+    picCaptions?: Array<string>;
+    underConstruction?: boolean;
+    markdown?: import("svelte").Snippet;
+    children?: import("svelte").Snippet;
   }
 
-  const swipeConfig =
-    picNumber > 1
-      ? { ...defaultSwipeConfig }
-      : { ...defaultSwipeConfig, showIndicators: false };
+  let {
+    picPath = "",
+    picNumber = 0,
+    picCaptions = [],
+    underConstruction = false,
+    markdown,
+    children,
+  }: Props = $props();
 
-  import Construction from "./construction.svelte";
+  let paths: Array<string> = [];
+
+  const getPicNumber = () => picNumber;
+  const getPicPath = () => picPath;
+
+  for (let i = 0; i < getPicNumber(); i++) {
+    let path = `${getPicPath()}${i}`;
+    paths.push(path);
+  }
+
+  // EMBLA CAROUSSEL
+  let emblaApi: EmblaCarouselType;
+  let options: EmblaOptionsType = { loop: true };
+
+  function onInit(event: CustomEvent<EmblaCarouselType>) {
+    emblaApi = event.detail;
+  }
+
+  const scrollPrev = () => emblaApi?.scrollPrev();
+  const scrollNext = () => emblaApi?.scrollNext();
 </script>
 
 {#if underConstruction}
@@ -39,45 +55,41 @@
   {#if picNumber != 0}
     <div class="card-wrapper">
       <Card width="fit-content">
-        <div class="swipe-holder" in:fade={fade1}>
-          <Swipe {...swipeConfig} bind:this={SwipeComponent}>
-            {#each paths as path, index}
-              <SwipeItem>
-                <div class="image-container">
-                  <Lazypicture
-                    caption={picCaptions[index]}
-                    lazy={false}
-                    spinner={true}
-                    sources={{
-                      base: `${path}.jpg`,
-                      webp: `${path}.webp`,
-                      avif: `${path}.avif`,
-                    }}
-                  />
+        <div class="embla-holder" in:fade={fade1}>
+          <div
+            class="embla__viewport"
+            onemblaInit={onInit}
+            use:useEmblaCarousel={{ options, plugins: [] }}
+          >
+            <div class="embla__container">
+              {#each paths as path, index}
+                <div class="embla__slide">
+                  <div class="image-container">
+                    <Lazypicture
+                      caption={picCaptions[index]}
+                      lazy={false}
+                      spinner={true}
+                      sources={{
+                        base: `${path}.jpg`,
+                        webp: `${path}.webp`,
+                        avif: `${path}.avif`,
+                      }}
+                    />
+                  </div>
                 </div>
-              </SwipeItem>
-            {/each}
-          </Swipe>
+              {/each}
+            </div>
+          </div>
           {#if picNumber > 1}
-            <button
-              class="swipe-button button-prev"
-              on:click={() => {
-                SwipeComponent.prevItem();
-              }}>&lt;</button
-            >
-            <button
-              class="swipe-button button-next"
-              on:click={() => {
-                SwipeComponent.nextItem();
-              }}>&gt;</button
-            >
+            <button class="embla-button" onclick={scrollPrev}>&lt;</button>
+            <button class="embla-button" onclick={scrollNext}>&gt;</button>
           {/if}
         </div>
       </Card>
     </div>
   {/if}
-  <slot name="markdown" />
-  <slot />
+  {@render markdown?.()}
+  {@render children?.()}
 </div>
 
 <style>
@@ -88,7 +100,7 @@
     flex-direction: column;
     align-items: center;
   }
-  .swipe-holder {
+  .embla-holder {
     position: relative;
     --width: clamp(200px, 75vmin, 70vmax);
     height: calc(var(--width) / 4 * 3);
@@ -96,23 +108,37 @@
     margin: auto;
   }
 
+  .embla__viewport {
+    overflow: hidden;
+  }
+
+  .embla__container {
+    display: flex;
+    /* touch-action: pan-y pinch-zoom; */
+  }
+
+  .embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
   .image-container {
     height: calc(var(--width) / 4 * 3);
   }
 
-  .swipe-button {
+  .embla-button {
     font-weight: bold;
     padding: 0;
     margin: 0;
 
-    background-color: var(--gray1);
+    background-color: var(--gray3);
     color: var(--font1);
     border: none;
     box-shadow: none;
     text-shadow: 0 0 5px var(--gray1);
 
     border-radius: 50%;
-    position: absolute;
+    /* position: absolute; */
     z-index: 2;
 
     --size: min(3.5rem, 9vmin);
@@ -125,15 +151,8 @@
     opacity: 0.7;
   }
 
-  .swipe-button:hover {
+  .embla-button:hover {
     background-color: hsla(0, 0%, 0%, 0.6);
-  }
-
-  .button-prev {
-    left: 0.2em;
-  }
-  .button-next {
-    right: 0.2em;
   }
 
   .markdown {

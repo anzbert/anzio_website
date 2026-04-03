@@ -1,10 +1,10 @@
-## TEMPLATE INFO
+# Svelte + TS + Vite
 
-### Svelte + TS + Vite
+This template should help get you started developing with Svelte and TypeScript in Vite.
 
 ## Recommended IDE Setup
 
-[VSCode](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
 
 ## Need an official Svelte framework?
 
@@ -16,7 +16,6 @@ Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also pow
 
 - It brings its own routing solution which might not be preferable for some users.
 - It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-  `vite dev` and `vite build` wouldn't work in a SvelteKit environment, for example.
 
 This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
 
@@ -43,6 +42,6 @@ If you have state that's important to retain within a component, consider creati
 ```ts
 // store.ts
 // An extremely simple external store
-import { writable } from "svelte/store";
-export default writable(0);
+import { writable } from 'svelte/store'
+export default writable(0)
 ```

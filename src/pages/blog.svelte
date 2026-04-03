@@ -5,7 +5,7 @@
   import BlogEntryBox from "../components/blogentrybox.svelte";
   import { allPosts, hashTags } from "../blog/!postindex";
 
-  let showTag: string = "all"; // default is "all"
+  let showTag: string = $state("all"); // default is "all"
 
   function changeTag(tag: string) {
     showTag = tag;
@@ -17,10 +17,10 @@
     {#if showTag === tag}
       <button
         class={tag === "all" ? "highlight all" : "highlight"}
-        on:click={() => changeTag(tag)}>{tag}</button
+        onclick={() => changeTag(tag)}>{tag}</button
       >
     {:else}
-      <button class={tag === "all" ? "all" : ""} on:click={() => changeTag(tag)}
+      <button class={tag === "all" ? "all" : ""} onclick={() => changeTag(tag)}
         >{tag}</button
       >
     {/if}
@@ -33,14 +33,13 @@
       {#each allPosts as post (post.title)}
         {#if post.tags.some((tag) => tag === showTag) || showTag === "all"}
           <div class="post" in:fly={flyLeft}>
-            <svelte:component
-              this={BlogEntryBox}
+            <BlogEntryBox
               title={post.title}
               date={post.date}
               tags={post.tags}
             >
-              <svelte:component this={post.post} />
-            </svelte:component>
+              <post.post />
+            </BlogEntryBox>
           </div>
         {/if}
       {/each}

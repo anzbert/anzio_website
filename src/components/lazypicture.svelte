@@ -5,20 +5,31 @@
     avif?: string;
   }
 
-  export let width: number = 100;
-  export let sources: picSources;
-  export let spinner: boolean = true;
-  export let lazy: boolean = false;
-  export let alt: string = "";
-  export let caption: string = "";
+  interface Props {
+    width?: number;
+    sources: picSources;
+    spinner?: boolean;
+    lazy?: boolean;
+    alt?: string;
+    caption?: string;
+  }
 
-  let imgVisible: boolean = false;
+  let {
+    width = 100,
+    sources,
+    spinner = true,
+    lazy = false,
+    alt = "",
+    caption = "",
+  }: Props = $props();
+
+  let imgVisible: boolean = $state(false);
 </script>
 
 <div class="flex-wrapper">
   <figure class="wrapper" style="width:{width}%">
     {#if spinner}
-      <div class="spinner" class:remove-spinner={imgVisible} />
+      <div class="spinner" class:remove-spinner={imgVisible}></div>
     {/if}
 
     <picture>
@@ -34,7 +45,7 @@
         srcset={sources.base}
         {alt}
         class:imgVisible
-        on:load|once={() => (imgVisible = true)}
+        onload={() => (imgVisible = true)}
       />
     </picture>
     {#if caption !== ""}

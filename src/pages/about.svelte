@@ -28,11 +28,11 @@
         <p>Click to get started:</p>
         <button
           class="menu-item text-button"
-          on:click={() => (location.hash = "projects")}>My Projects</button
+          onclick={() => (location.hash = "projects")}>My Projects</button
         >
         <button
           class="menu-item text-button"
-          on:click={() => (location.hash = "blog")}>Blog</button
+          onclick={() => (location.hash = "blog")}>Blog</button
         >
       </div>
       <hr />

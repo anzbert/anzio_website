@@ -1,5 +1,5 @@
 <script lang="ts">
-  let showMenu: boolean;
+  let showMenu: boolean = $state(false);
 
   // remove menu when screen width / orientation changes:
   const mq_width = window.matchMedia("(max-width: 500px)");
@@ -9,10 +9,10 @@
 </script>
 
 <menu>
-  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <h1
-    on:click={() => (location.hash = "about")}
-    on:keypress={() => (location.hash = "about")}
+    onclick={() => (location.hash = "about")}
+    onkeypress={() => (location.hash = "about")}
     class="title"
   >
     ANZ I/O
@@ -20,15 +20,15 @@
   <div class="buttons">
     <button
       class="menu-item text-button"
-      on:click={() => (location.hash = "projects")}>Projects</button
+      onclick={() => (location.hash = "projects")}>Projects</button
     >
     <button
       class="menu-item text-button"
-      on:click={() => (location.hash = "blog")}>Blog</button
+      onclick={() => (location.hash = "blog")}>Blog</button
     >
     <button
       class="menu-item text-button"
-      on:click={() => (location.hash = "about")}>Home</button
+      onclick={() => (location.hash = "about")}>Home</button
     >
     <a class="logo-icon" href="https://github.com/anzbert/anzio_website">
       <img
@@ -37,19 +37,19 @@
         alt="GitHub Logo"
       />
     </a>
-    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
       class="menu-icon"
-      on:click={() => {
+      onclick={() => {
         showMenu = true;
       }}
-      on:keypress={() => {
+      onkeypress={() => {
         showMenu = true;
       }}
     >
-      <div class="burger" />
-      <div class="burger" />
-      <div class="burger" />
+      <div class="burger"></div>
+      <div class="burger"></div>
+      <div class="burger"></div>
     </div>
   </div>
 </menu>
@@ -58,38 +58,38 @@
 {#if showMenu === true}
   <menu class="popup-menu">
     <div class="row">
-      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div
         class="menu-icon"
-        on:click={() => {
+        onclick={() => {
           showMenu = false;
         }}
-        on:keypress={() => {
+        onkeypress={() => {
           showMenu = false;
         }}
       >
-        <div class="close-x" />
+        <div class="close-x"></div>
       </div>
     </div>
 
     <div class="row row2">
       <button
         class="menu-item"
-        on:click={() => {
+        onclick={() => {
           showMenu = false;
           location.hash = "projects";
         }}>Projects</button
       >
       <button
         class="menu-item"
-        on:click={() => {
+        onclick={() => {
           showMenu = false;
           location.hash = "blog";
         }}>Blog</button
       >
       <button
         class="menu-item"
-        on:click={() => {
+        onclick={() => {
           showMenu = false;
           location.hash = "about";
         }}>About</button

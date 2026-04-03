@@ -1,9 +1,14 @@
 <script lang="ts">
-  export let width = "85%";
+  interface Props {
+    width?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let { width = "85%", children }: Props = $props();
 </script>
 
 <div style="--width:{width}" class="content">
-  <slot />
+  {@render children?.()}
 </div>
 
 <style>

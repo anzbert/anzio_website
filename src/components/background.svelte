@@ -1,17 +1,20 @@
 <script lang="ts">
-  // export let bg_image = "adrien-olichon-X8o-P23flgI-unsplash";
-  export let bg_image = "dejan-zakic-LDciXr1ynFk-unsplash";
+  interface Props {
+    // export let bg_image = "adrien-olichon-X8o-P23flgI-unsplash";
+    bg_image?: string;
+  }
 
-  let bg_path = "img/background/" + bg_image;
+  let { bg_image = "dejan-zakic-LDciXr1ynFk-unsplash" }: Props = $props();
+  let bg_path = $derived("img/background/" + bg_image);
 
-  let imgVisible = false;
+  let imgVisible = $state(false);
 </script>
 
 <picture>
   <source srcset="{bg_path}.avif" type="image/avif" />
   <source srcset="{bg_path}.webp" type="image/webp" />
   <img
-    on:load|once={() => (imgVisible = true)}
+    onload={() => (imgVisible = true)}
     class:imgVisible
     srcset="{bg_path}.jpg"
     alt="Background"
