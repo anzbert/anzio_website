@@ -7,10 +7,18 @@
   import Lazypicture from "../components/lazypicture.svelte";
   import { fade, fly } from "svelte/transition";
   import { fade1, flyLeft, defaultSwipeConfig } from "../stores";
-  import { Swipe, SwipeItem } from "svelte-swipe";
 
   import type { SvelteComponent } from "svelte";
   let SwipeComponent: SvelteComponent = $state(); // from swipe module. type unknown
+
+  let {
+    picPath = "",
+    picNumber = 0,
+    picCaptions = [],
+    underConstruction = false,
+    markdown,
+    children,
+  }: Props = $props();
 
   let paths: Array<string> = [];
   if (picPath !== "") {
@@ -31,18 +39,9 @@
     picNumber?: number;
     picCaptions?: Array<string>;
     underConstruction?: boolean;
-    markdown?: import('svelte').Snippet;
-    children?: import('svelte').Snippet;
+    markdown?: import("svelte").Snippet;
+    children?: import("svelte").Snippet;
   }
-
-  let {
-    picPath = "",
-    picNumber = 0,
-    picCaptions = [],
-    underConstruction = false,
-    markdown,
-    children
-  }: Props = $props();
 </script>
 
 {#if underConstruction}
