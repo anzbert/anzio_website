@@ -1,11 +1,16 @@
-<script>
-  export let fontSize = "4rem";
-  export let background = "var(--gradient3)";
+<script lang="ts">
+  interface Props {
+    fontSize?: string;
+    background?: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let { fontSize = "4rem", background = "var(--gradient3)", children }: Props = $props();
 </script>
 
 <div class="wrapper">
   <h2 style="font-size:{fontSize}; background-image: {background}" class="text">
-    <slot />
+    {@render children?.()}
   </h2>
 </div>
 

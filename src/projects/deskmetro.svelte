@@ -11,7 +11,9 @@
 </script>
 
 <Projectpage {picPath} {picNumber} {picCaptions} underConstruction={true}>
-  <div slot="markdown">
-    <Markdown />
-  </div>
+  {#snippet markdown()}
+    <div >
+      <Markdown />
+    </div>
+  {/snippet}
 </Projectpage>

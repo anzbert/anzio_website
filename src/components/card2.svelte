@@ -2,7 +2,21 @@
   import { scale, fade } from "svelte/transition";
   import { quintOut } from "svelte/easing";
 
-  export let square = "min(35vmin, 280px)";
+  interface Props {
+    square?: string;
+    header?: import('svelte').Snippet;
+    thumbnail?: import('svelte').Snippet;
+    icons?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    square = "min(35vmin, 280px)",
+    header,
+    thumbnail,
+    icons,
+    children
+  }: Props = $props();
   const scaleSettings = {
     duration: 400,
     delay: 400,
@@ -15,17 +29,17 @@
 <div style="--square: {square}" class="wrapper">
   <div class="upper-box">
     <div class="card-header">
-      <slot name="header" />
+      {@render header?.()}
     </div>
     <div class="thumbnail">
-      <slot name="thumbnail" />
+      {@render thumbnail?.()}
     </div>
     <div class="icons">
-      <slot name="icons" />
+      {@render icons?.()}
     </div>
-    <slot />
+    {@render children?.()}
   </div>
-  <div class="lower-box" in:scale={scaleSettings} />
+  <div class="lower-box" in:scale={scaleSettings}></div>
 </div>
 
 <style>

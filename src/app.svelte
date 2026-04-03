@@ -7,7 +7,7 @@
 
   /////////////////////////////////////////////////////////////
   // Hash-Based Navigation:
-  let nav: Array<string> = window.location.hash.split("/");
+  let nav: Array<string> = $state(window.location.hash.split("/"));
   // console.log("entry hash: ", nav);
 
   window.onhashchange = () => {

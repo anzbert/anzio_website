@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export const logos: { [key: string]: logo } = {
     reaktor: {
       name: "Reaktor",
@@ -104,12 +104,21 @@
 </script>
 
 <script lang="ts">
-  export let logo = "tools";
-  let req_logo = logos[logo];
+  interface Props {
+    logo?: string;
+    link?: boolean;
+    name?: boolean;
+    height?: string;
+  }
 
-  export let link = false;
-  export let name = false;
-  export let height = "1em";
+  let {
+    logo = "tools",
+    link = false,
+    name = false,
+    height = "1em",
+  }: Props = $props();
+
+  let req_logo = logos[logo];
 </script>
 
 <div class="wrapper">

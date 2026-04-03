@@ -1,8 +1,4 @@
 <script lang="ts">
-  export let picPath: string = "";
-  export let picNumber: number = 0;
-  export let picCaptions: Array<string> = [];
-  export let underConstruction: boolean = false;
   // slot name="markdown"
   /////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
@@ -14,7 +10,7 @@
   import { Swipe, SwipeItem } from "svelte-swipe";
 
   import type { SvelteComponent } from "svelte";
-  let SwipeComponent: SvelteComponent; // from swipe module. type unknown
+  let SwipeComponent: SvelteComponent = $state(); // from swipe module. type unknown
 
   let paths: Array<string> = [];
   if (picPath !== "") {
@@ -30,6 +26,23 @@
       : { ...defaultSwipeConfig, showIndicators: false };
 
   import Construction from "./construction.svelte";
+  interface Props {
+    picPath?: string;
+    picNumber?: number;
+    picCaptions?: Array<string>;
+    underConstruction?: boolean;
+    markdown?: import('svelte').Snippet;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    picPath = "",
+    picNumber = 0,
+    picCaptions = [],
+    underConstruction = false,
+    markdown,
+    children
+  }: Props = $props();
 </script>
 
 {#if underConstruction}
@@ -61,13 +74,13 @@
           {#if picNumber > 1}
             <button
               class="swipe-button button-prev"
-              on:click={() => {
+              onclick={() => {
                 SwipeComponent.prevItem();
               }}>&lt;</button
             >
             <button
               class="swipe-button button-next"
-              on:click={() => {
+              onclick={() => {
                 SwipeComponent.nextItem();
               }}>&gt;</button
             >
@@ -76,8 +89,8 @@
       </Card>
     </div>
   {/if}
-  <slot name="markdown" />
-  <slot />
+  {@render markdown?.()}
+  {@render children?.()}
 </div>
 
 <style>

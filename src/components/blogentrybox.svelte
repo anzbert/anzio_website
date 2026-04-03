@@ -1,8 +1,18 @@
 <script lang="ts">
   import Textbox1 from "./textbox1.svelte";
-  export let date: Date;
-  export let tags: Array<string>;
-  export let title: string;
+  interface Props {
+    date: Date;
+    tags: Array<string>;
+    title: string;
+    children?: import('svelte').Snippet;
+  }
+
+  let {
+    date,
+    tags,
+    title,
+    children
+  }: Props = $props();
 
   const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
@@ -31,11 +41,11 @@
     {/each}
   </div>
 
-  <slot>
+  {#if children}{@render children()}{:else}
     <!-- blog content -->
-  </slot>
+  {/if}
 
-  <div class="footer" />
+  <div class="footer"></div>
 </Textbox1>
 
 <style>

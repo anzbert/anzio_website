@@ -1,6 +1,10 @@
 <script lang="ts">
-  export let caption: string = "";
-  export let src: string; // embed link, such as: "https://sketchfab.com/models/21de728eda6e4cc795468fb3ccfe835b/embed?ui_theme=dark"
+  interface Props {
+    caption?: string;
+    src: string; // embed link, such as: "https://sketchfab.com/models/21de728eda6e4cc795468fb3ccfe835b/embed?ui_theme=dark"
+  }
+
+  let { caption = "", src }: Props = $props();
 </script>
 
 <figure class="sketchfab-embed-wrapper">
@@ -10,7 +14,7 @@
     allowfullscreen
     allow="autoplay; fullscreen; xr-spatial-tracking"
     {src}
-  />
+></iframe>
   {#if caption.length > 0}
     <figcaption>
       {caption}
