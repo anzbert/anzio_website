@@ -3,7 +3,9 @@
   import Lazypicture from "../components/lazypicture.svelte";
   import { fade, fly } from "svelte/transition";
   import { fade1, flyLeft, defaultSwipeConfig } from "../stores";
+
   import useEmblaCarousel from "embla-carousel-svelte";
+  import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 
   import type { SvelteComponent } from "svelte";
   // let SwipeComponent: SvelteComponent = $state(); // from swipe module. type unknown
@@ -25,10 +27,16 @@
     }
   }
 
-  const swipeConfig =
-    picNumber > 1
-      ? { ...defaultSwipeConfig }
-      : { ...defaultSwipeConfig, showIndicators: false };
+  let emblaApi: EmblaCarouselType;
+  let options: EmblaOptionsType = { loop: true };
+
+  function onInit(event: CustomEvent<EmblaCarouselType>) {
+    emblaApi = event.detail;
+    // console.log("Embla is ready:", emblaApi.slideNodes());
+  }
+
+  const scrollPrev = () => emblaApi?.scrollPrev();
+  const scrollNext = () => emblaApi?.scrollNext();
 
   import Construction from "./construction.svelte";
   interface Props {
@@ -48,41 +56,35 @@
   {#if picNumber != 0}
     <div class="card-wrapper">
       <Card width="fit-content">
-        <div class="swipe-holder" in:fade={fade1}>
-          <div class="embla__viewport" use:useEmblaCarousel>
+        <div class="embla-holder" in:fade={fade1}>
+          <div
+            class="embla__viewport"
+            onemblaInit={onInit}
+            use:useEmblaCarousel={{ options, plugins: [] }}
+          >
             <div class="embla__container">
               {#each paths as path, index}
                 <div class="embla__slide">
-                  <div class="image-container">
-                    <Lazypicture
-                      caption={picCaptions[index]}
-                      lazy={false}
-                      spinner={true}
-                      sources={{
-                        base: `${path}.jpg`,
-                        webp: `${path}.webp`,
-                        avif: `${path}.avif`,
-                      }}
-                    />
-                  </div>
+                  <!-- <div class="image-container"> -->
+                  <Lazypicture
+                    caption={picCaptions[index]}
+                    lazy={false}
+                    spinner={true}
+                    sources={{
+                      base: `${path}.jpg`,
+                      webp: `${path}.webp`,
+                      avif: `${path}.avif`,
+                    }}
+                  />
+                  <!-- </div> -->
                 </div>
               {/each}
             </div>
           </div>
-          <!-- {#if picNumber > 1}
-            <button
-              class="swipe-button button-prev"
-              onclick={() => {
-                SwipeComponent.prevItem();
-              }}>&lt;</button
-            >
-            <button
-              class="swipe-button button-next"
-              onclick={() => {
-                SwipeComponent.nextItem();
-              }}>&gt;</button
-            >
-          {/if} -->
+          {#if picNumber > 1}
+            <button onclick={scrollPrev}>Previous</button>
+            <button onclick={scrollNext}>Next</button>
+          {/if}
         </div>
       </Card>
     </div>
@@ -99,12 +101,26 @@
     flex-direction: column;
     align-items: center;
   }
-  .swipe-holder {
+  .embla-holder {
     position: relative;
     --width: clamp(200px, 75vmin, 70vmax);
     height: calc(var(--width) / 4 * 3);
     width: var(--width);
     margin: auto;
+  }
+
+  .embla__viewport {
+    overflow: hidden;
+  }
+
+  .embla__container {
+    display: flex;
+    /* touch-action: pan-y pinch-zoom; */
+  }
+
+  .embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
   }
 
   .image-container {
