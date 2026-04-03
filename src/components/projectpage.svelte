@@ -65,25 +65,25 @@
             <div class="embla__container">
               {#each paths as path, index}
                 <div class="embla__slide">
-                  <!-- <div class="image-container"> -->
-                  <Lazypicture
-                    caption={picCaptions[index]}
-                    lazy={false}
-                    spinner={true}
-                    sources={{
-                      base: `${path}.jpg`,
-                      webp: `${path}.webp`,
-                      avif: `${path}.avif`,
-                    }}
-                  />
-                  <!-- </div> -->
+                  <div class="image-container">
+                    <Lazypicture
+                      caption={picCaptions[index]}
+                      lazy={false}
+                      spinner={true}
+                      sources={{
+                        base: `${path}.jpg`,
+                        webp: `${path}.webp`,
+                        avif: `${path}.avif`,
+                      }}
+                    />
+                  </div>
                 </div>
               {/each}
             </div>
           </div>
           {#if picNumber > 1}
-            <button onclick={scrollPrev}>Previous</button>
-            <button onclick={scrollNext}>Next</button>
+            <button class="embla-button" onclick={scrollPrev}>&lt;</button>
+            <button class="embla-button" onclick={scrollNext}>&gt;</button>
           {/if}
         </div>
       </Card>
@@ -127,19 +127,19 @@
     height: calc(var(--width) / 4 * 3);
   }
 
-  .swipe-button {
+  .embla-button {
     font-weight: bold;
     padding: 0;
     margin: 0;
 
-    background-color: var(--gray1);
+    background-color: var(--gray3);
     color: var(--font1);
     border: none;
     box-shadow: none;
     text-shadow: 0 0 5px var(--gray1);
 
     border-radius: 50%;
-    position: absolute;
+    /* position: absolute; */
     z-index: 2;
 
     --size: min(3.5rem, 9vmin);
@@ -152,15 +152,8 @@
     opacity: 0.7;
   }
 
-  .swipe-button:hover {
+  .embla-button:hover {
     background-color: hsla(0, 0%, 0%, 0.6);
-  }
-
-  .button-prev {
-    left: 0.2em;
-  }
-  .button-next {
-    right: 0.2em;
   }
 
   .markdown {
