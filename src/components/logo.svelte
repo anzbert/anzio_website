@@ -118,7 +118,8 @@
     height = "1em",
   }: Props = $props();
 
-  let req_logo = logos[logo];
+  const getLogo = () => logo;
+  let req_logo = logos[getLogo()];
 </script>
 
 <div class="wrapper">
