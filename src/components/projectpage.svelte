@@ -1,15 +1,12 @@
 <script lang="ts">
-  // slot name="markdown"
-  /////////////////////////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////////////////////////
-
   import Card from "../components/card1.svelte";
   import Lazypicture from "../components/lazypicture.svelte";
   import { fade, fly } from "svelte/transition";
   import { fade1, flyLeft, defaultSwipeConfig } from "../stores";
+  import useEmblaCarousel from "embla-carousel-svelte";
 
   import type { SvelteComponent } from "svelte";
-  let SwipeComponent: SvelteComponent = $state(); // from swipe module. type unknown
+  // let SwipeComponent: SvelteComponent = $state(); // from swipe module. type unknown
 
   let {
     picPath = "",
@@ -52,25 +49,27 @@
     <div class="card-wrapper">
       <Card width="fit-content">
         <div class="swipe-holder" in:fade={fade1}>
-          <Swipe {...swipeConfig} bind:this={SwipeComponent}>
-            {#each paths as path, index}
-              <SwipeItem>
-                <div class="image-container">
-                  <Lazypicture
-                    caption={picCaptions[index]}
-                    lazy={false}
-                    spinner={true}
-                    sources={{
-                      base: `${path}.jpg`,
-                      webp: `${path}.webp`,
-                      avif: `${path}.avif`,
-                    }}
-                  />
+          <div class="embla__viewport" use:useEmblaCarousel>
+            <div class="embla__container">
+              {#each paths as path, index}
+                <div class="embla__slide">
+                  <div class="image-container">
+                    <Lazypicture
+                      caption={picCaptions[index]}
+                      lazy={false}
+                      spinner={true}
+                      sources={{
+                        base: `${path}.jpg`,
+                        webp: `${path}.webp`,
+                        avif: `${path}.avif`,
+                      }}
+                    />
+                  </div>
                 </div>
-              </SwipeItem>
-            {/each}
-          </Swipe>
-          {#if picNumber > 1}
+              {/each}
+            </div>
+          </div>
+          <!-- {#if picNumber > 1}
             <button
               class="swipe-button button-prev"
               onclick={() => {
@@ -83,7 +82,7 @@
                 SwipeComponent.nextItem();
               }}>&gt;</button
             >
-          {/if}
+          {/if} -->
         </div>
       </Card>
     </div>

@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { once } from 'svelte/legacy';
-
-  
   interface Props {
     // export let bg_image = "adrien-olichon-X8o-P23flgI-unsplash";
     bg_image?: string;
@@ -18,7 +15,7 @@
   <source srcset="{bg_path}.avif" type="image/avif" />
   <source srcset="{bg_path}.webp" type="image/webp" />
   <img
-    onload={once(() => (imgVisible = true))}
+    onload={() => (imgVisible = true)}
     class:imgVisible
     srcset="{bg_path}.jpg"
     alt="Background"

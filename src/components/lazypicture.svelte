@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { once } from "svelte/legacy";
-
   interface picSources {
     base: string;
     webp?: string;
@@ -47,7 +45,7 @@
         srcset={sources.base}
         {alt}
         class:imgVisible
-        onload={once(() => (imgVisible = true))}
+        onload={() => (imgVisible = true)}
       />
     </picture>
     {#if caption !== ""}

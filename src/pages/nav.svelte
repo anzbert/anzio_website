@@ -1,5 +1,5 @@
 <script lang="ts">
-  let showMenu: boolean = $state();
+  let showMenu: boolean = $state(false);
 
   // remove menu when screen width / orientation changes:
   const mq_width = window.matchMedia("(max-width: 500px)");
