@@ -22,11 +22,3 @@ export const flyTop = {
 };
 
 export const fade1 = { delay: 300, duration: 500 };
-
-export const defaultSwipeConfig = {
-  defaultIndex: 0,
-  showIndicators: true,
-  autoplay: false,
-  delay: 4000,
-  transitionDuration: 500,
-};

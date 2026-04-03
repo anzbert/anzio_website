@@ -5,8 +5,7 @@
   }
 
   let { bg_image = "dejan-zakic-LDciXr1ynFk-unsplash" }: Props = $props();
-
-  let bg_path = "img/background/" + bg_image;
+  let bg_path = $derived("img/background/" + bg_image);
 
   let imgVisible = $state(false);
 </script>

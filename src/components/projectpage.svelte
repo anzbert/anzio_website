@@ -2,13 +2,20 @@
   import Card from "../components/card1.svelte";
   import Lazypicture from "../components/lazypicture.svelte";
   import { fade, fly } from "svelte/transition";
-  import { fade1, flyLeft, defaultSwipeConfig } from "../stores";
+  import { fade1, flyLeft } from "../stores";
+  import Construction from "./construction.svelte";
 
   import useEmblaCarousel from "embla-carousel-svelte";
   import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 
-  import type { SvelteComponent } from "svelte";
-  // let SwipeComponent: SvelteComponent = $state(); // from swipe module. type unknown
+  interface Props {
+    picPath?: string;
+    picNumber?: number;
+    picCaptions?: Array<string>;
+    underConstruction?: boolean;
+    markdown?: import("svelte").Snippet;
+    children?: import("svelte").Snippet;
+  }
 
   let {
     picPath = "",
@@ -20,33 +27,25 @@
   }: Props = $props();
 
   let paths: Array<string> = [];
-  if (picPath !== "") {
-    for (let i = 0; i < picNumber; i++) {
-      let path = `${picPath}${i}`;
-      paths.push(path);
-    }
+
+  const getPicNumber = () => picNumber;
+  const getPicPath = () => picPath;
+
+  for (let i = 0; i < getPicNumber(); i++) {
+    let path = `${getPicPath()}${i}`;
+    paths.push(path);
   }
 
+  // EMBLA CAROUSSEL
   let emblaApi: EmblaCarouselType;
   let options: EmblaOptionsType = { loop: true };
 
   function onInit(event: CustomEvent<EmblaCarouselType>) {
     emblaApi = event.detail;
-    // console.log("Embla is ready:", emblaApi.slideNodes());
   }
 
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
-
-  import Construction from "./construction.svelte";
-  interface Props {
-    picPath?: string;
-    picNumber?: number;
-    picCaptions?: Array<string>;
-    underConstruction?: boolean;
-    markdown?: import("svelte").Snippet;
-    children?: import("svelte").Snippet;
-  }
 </script>
 
 {#if underConstruction}
